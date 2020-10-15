@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, observable, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError , flatMap } from 'rxjs/operators';
 import { Category } from './category-model';
 import { element } from 'protractor';
@@ -9,8 +9,7 @@ import { element } from 'protractor';
   providedIn: 'root'
 })
 export class CategoryService {
-  // tslint:disable-next-line: no-inferrable-types
-  private apiPath: string = 'api/categoeis';
+  private apiPath = 'api/categories';
 
   constructor( private http: HttpClient) { }
 
@@ -35,7 +34,7 @@ export class CategoryService {
       catchError(this.handleError),
       map(this.jsonDataCategory)
     );
-  } 
+  }
 
   update(category: Category): Observable<Category>{
     const url = this.apiPath + '/' + category.id;
@@ -67,7 +66,6 @@ export class CategoryService {
 
   private handleError(error: any): Observable<any>{
     console.log('Erro na requisição', error);
-     // tslint:disable-next-line: align
-     return throwError(error);
+    return throwError(error);
   }
 }
