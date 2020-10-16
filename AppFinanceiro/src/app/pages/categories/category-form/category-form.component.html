@@ -6,21 +6,17 @@
     </ol>
 </nav>
 
-
 <div class="row mb-4">
     <div class="col-md">
-        <h1 class="h2 border-left pl-2"> Formulário de categoria</h1>
-    </div>
-    <div class="col-md">
-        <a routerLink="/categories" class="btn btn-outline-info float-right"> <i class="fas fa-undo"></i> Voltar</a>
+        <h1 class="h2 border-left pl-2"> Formulário de categoria </h1>
     </div>
 </div>
 
-<form class="form-froup">
-
-    <div class="card">
-        <div class="card-header">Informações sobre a categoria</div>
-
+<form [formGroup]="categoryForm">
+    <div class="card font-weight-bold ">
+        <div class="card-header bg-primary text-light ">
+             <p>Informações sobre a categoria</p>
+        </div>
         <div class="card-body">
             <div class="form-row">
                 <div class="form-group col-md-4">
@@ -34,8 +30,8 @@
             </div>
         </div>    
     </div>
-
-
-     <button type="submit" class="btn btn-outline-success mt-4 float-right"><i class="far fa-edit"></i> Salvar</button>
-    
-  </form>
+    <div class="col-md mt-3">
+        <a routerLink="/categories" class="btn btn-outline-info mr-2"> <i class="fas fa-undo"></i> Voltar</a>
+        <button type="submit" class="btn btn-outline-success "><i class="far fa-edit"></i> Salvar</button>
+    </div>  
+</form>

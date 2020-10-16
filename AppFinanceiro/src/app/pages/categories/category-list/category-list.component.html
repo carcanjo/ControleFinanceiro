@@ -1,7 +1,7 @@
 <nav class="mb-5">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"> <a routerLink="/"> Home</a> </li>
-        <li class="breadcrumb-item active"> Categorias</li> 
+        <li class="breadcrumb-item "><a routerLink="/categories"> Categorias</a></li> 
     </ol>
 </nav>
 
@@ -23,14 +23,14 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let category of categories; index as i">
+        <tr *ngFor="let category of categories">
             <td>
                 <strong>{{category.name}}</strong><br>
                 <small>{{category.description}}</small>
             </td>
             <td>
                 <a [routerLink]="[category.id,'edit']" class="btn btn-outline-warning btn-sm mr-2"><i class="far fa-edit"></i> Editar</a> 
-                <button (click)="deleteCategory(category)" class="btn btn-outline-danger btn-sm"><i class="far fa-trash-alt"></i> Excluir </button>
+                <button (click)="deleteCategory(category)" class="btn btn-outline-danger btn-sm mt-1"><i class="far fa-trash-alt"></i> Excluir </button>
             </td>
         </tr>
     </tbody>
