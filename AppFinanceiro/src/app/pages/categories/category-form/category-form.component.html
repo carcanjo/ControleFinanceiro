@@ -2,17 +2,17 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"> <a routerLink="/"> Home</a> </li>
         <li class="breadcrumb-item "><a routerLink="/categories"> Categorias</a></li> 
-        <li class="breadcrumb-item active"><a routerLink="/categories">Formulário de Categorias</a></li> 
+        <li class="breadcrumb-item active"><a routerLink="/categories">{{pageTitle}}</a></li> 
     </ol>
 </nav>
 
 <div class="row mb-4">
     <div class="col-md">
-        <h1 class="h2 border-left pl-2"> Formulário de categoria </h1>
+        <h1 class="h2 border-left pl-2">{{pageTitle}} </h1>
     </div>
 </div>
 
-<form [formGroup]="categoryForm">
+<form [formGroup]="categoryForm" (submit)="submitForm()">
     <div class="card font-weight-bold ">
         <div class="card-header bg-primary text-light ">
              <p>Informações sobre a categoria</p>
@@ -21,17 +21,21 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="name"> Nome</label>
-                    <input type="text" class="text form-control">
+                    <input type="text" class="form-control" id="name"  formControlName ="name">
+                    <div class="text-danger" *ngIf="categoryForm.get('name').invalid && categoryForm.get('name').touched">
+                        <div *ngIf="categoryForm.get('name').errors.required"> Campo obrigatório </div>
+                        <div *ngIf="categoryForm.get('name').errors.minlength"> Campo deve conter no minimo dois caracteres</div>
+                    </div>
                 </div>
                 <div class="form-froup col-md-8">
                     <label for="description" >Descrição </label>
-                    <input type="text" class="form-control" id="description">
+                    <input type="text" class="form-control" id="description" formControlName ="description">
                 </div>   
             </div>
         </div>    
     </div>
     <div class="col-md mt-3">
         <a routerLink="/categories" class="btn btn-outline-info mr-2"> <i class="fas fa-undo"></i> Voltar</a>
-        <button type="submit" class="btn btn-outline-success "><i class="far fa-edit"></i> Salvar</button>
+        <button [disabled]="submittingForm || categoryForm.invalid" type="submit" class="btn btn-outline-success "><i class="far fa-edit"></i> Salvar</button>
     </div>  
 </form>

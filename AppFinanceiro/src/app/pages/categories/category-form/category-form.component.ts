@@ -1,6 +1,6 @@
-// //FormBuilder é o construtor de formularios, FormControl é objeto referente aos campos
-// //FormGroup é o responsavel pelo formulario
-// //validator faz as validações
+// //FormBuilder ï¿½ o construtor de formularios, FormControl ï¿½ objeto referente aos campos
+// //FormGroup ï¿½ o responsavel pelo formulario
+// //validator faz as validaï¿½ï¿½es
 // ActivatedRoute para identificar quando vai ser edit ou quando vai ser new 
 // Route para fazer direcionamentos
 // importar as categorias para poder trabalhar com elas 
@@ -29,7 +29,7 @@ export class CategoryFormComponent implements OnInit {
   submittingForm: boolean = false;
   category: Category =  new Category();
 
-  //Definindo a injeção de dependencia 
+  //Definindo a injeï¿½ï¿½o de dependencia 
   constructor(
     private categoryService: CategoryService,
     private route: ActivatedRoute,
@@ -38,16 +38,24 @@ export class CategoryFormComponent implements OnInit {
     
     ) { }
 
-  // Definir os metodos que vão ser executados em cada um dos ciclos do componente  
+  // Definir os metodos que vï¿½o ser executados em cada um dos ciclos do componente  
   ngOnInit(): void {
-    this.setCurrentAction(); // vou definir qual a ação
-    this.buildCategoryForm(); // criar o formulário
-    this.loadCategory(); // carregar o objeto em questão
+    this.setCurrentAction(); // vou definir qual a aï¿½ï¿½o
+    this.buildCategoryForm(); // criar o formulï¿½rio
+    this.loadCategory(); // carregar o objeto em questï¿½o
   }
 
   ngAfterContentChecked(): void {
-    // metodo so inicia após carregamento de todos os dados e regras da pagina
+    // metodo so inicia apï¿½s carregamento de todos os dados e regras da pagina
     this.setPageTitle();
+  }
+
+  submitForm(){
+    this.submittingForm = true;
+    if(this.currentAction == 'new')
+      this.createCategory();
+    else  
+      this.updateCategory();
   }
 
 
@@ -59,7 +67,7 @@ export class CategoryFormComponent implements OnInit {
       this.currentAction = 'edit'
   }
 
-  //Define o formulário de categoria
+  //Define o formulï¿½rio de categoria
   private buildCategoryForm(){
     this.categoryForm = this.formBuilder.group({
       id: [null],
@@ -76,13 +84,13 @@ export class CategoryFormComponent implements OnInit {
       .subscribe(
         (category) =>{
           this.category = category
-          this.categoryForm.patchValue(this.category) // seta os valores no formulários
+          this.categoryForm.patchValue(this.category) // seta os valores no formulï¿½rios
         },
-        (error) => alert('ocorreu um erro no servidor, tente mais tarde!')
+        (error) => toastr.Warning('Ocorreu um erro no servidor','Aviso')  //alert('ocorreu um erro no servidor, tente mais tarde!')
       )
   }
 
-  // após ser carregado todos dados da pagina exibo o nome da pagina dinamico
+  // apï¿½s ser carregado todos dados da pagina exibo o nome da pagina dinamico
   private setPageTitle(){
     if(this.currentAction == 'new'){
       this.pageTitle = 'Cadastro de nova categoria';
@@ -93,4 +101,45 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
+  private createCategory(){
+    // criando um objeto e atribuindo os valores do formulario
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.create(category)
+    .subscribe(
+      category => this.actionForSuccess(category),
+      error => this.actionForError(error)
+    )
+  }
+
+  private updateCategory(){
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.update(category)
+    .subscribe(
+      category => this.actionForSuccess(category),
+      error => this.actionForError(error)
+    )
+  }
+
+
+  private actionForSuccess(category: Category){
+    toastr.success('SolicitaÃ§Ã£o processada com sucesso', 'Sucesso');
+
+    //redirect/ reload na pagina
+    this.router.navigateByUrl('categories',{skipLocationChange: true}).then(
+      () => this.router.navigate(['categories', category.id, 'edit'])
+    ) 
+    // {skipLocationChange: true} nÃ£o adiciona no historico de navegaï¿½ï¿½o 
+  }
+
+  private actionForError(error){
+    toastr.error('Ocorreu um erro ao processar a sua solicitaÃ§Ã£o', 'Erro');
+    this.submittingForm = false; 
+
+    if(error.status == 422){
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    }
+    else{
+      this.serverErrorMessages = ['Falha na comunicaÃ§Ã£o com o servidor'];
+    }
+  }
 }

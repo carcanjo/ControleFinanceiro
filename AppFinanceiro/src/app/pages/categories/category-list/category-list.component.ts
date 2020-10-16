@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category} from '../shared/category-model';
 import { CategoryService} from '../shared/category.service';
+import toastr from 'toastr';
 
 @Component({
   selector: 'app-category-list',
@@ -28,12 +29,12 @@ export class CategoryListComponent implements OnInit {
     const mustDelete = confirm('Deseja realmente excluir este item?');
 
     if (mustDelete){
+      toastr.success('Categoria excluida com sucesso', 'Sucesso');
       this.categoryService.delete(category.id).subscribe(
-        // tslint:disable-next-line: triple-equals
         () => this.categories = this.categories.filter(element => element != category),
-        () => alert('Erro ao tentar excluir')
+        () => toastr.error('Erro ao se comunicar com o servidor', 'Erro')
+        
       );
     }
   }
-
 }
