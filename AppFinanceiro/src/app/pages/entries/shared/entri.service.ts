@@ -2,46 +2,46 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError , flatMap } from 'rxjs/operators';
-import { Category } from './category-model';
+import { Entry } from './entri.model';
 import { element } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
-  private apiPath = 'api/categories';
+export class EntryService {
+  private apiPath = 'api/entries';
 
   constructor( private http: HttpClient) { }
 
 
-  getAll(): Observable<Category[]>{
+  getAll(): Observable<Entry[]>{
     return this.http.get(this.apiPath).pipe(
       catchError(this.handleError),
-      map(this.jsonDataCategories)
+      map(this.jsonDataEntries)
     );
   }
 
-  getById(id: number): Observable<Category>{
+  getById(id: number): Observable<Entry>{
     const url = this.apiPath + '/' + id;
     return this.http.get(url).pipe(
       catchError(this.handleError),
-      map(this.jsonDataCategory)
+      map(this.jsonDataEntry)
     );
   }
 
-  create(category: Category): Observable<Category>{
-    return this.http.post(this.apiPath, category).pipe(
+  create(entry: Entry): Observable<Entry>{
+    return this.http.post(this.apiPath, entry).pipe(
       catchError(this.handleError),
-      map(this.jsonDataCategory)
+      map(this.jsonDataEntry)
     );
   }
 
-  update(category: Category): Observable<Category>{
-    const url = this.apiPath + '/' + category.id;
+  update(entry: Entry): Observable<Entry>{
+    const url = this.apiPath + '/' + entry.id;
 
-    return this.http.put(url, category).pipe(
+    return this.http.put(url, entry).pipe(
       catchError(this.handleError),
-      map(() => category)
+      map(() => entry)
     );
   }
 
@@ -53,14 +53,14 @@ export class CategoryService {
     );
   }
 
-  private jsonDataCategory(jsonData: any): Category{
-    return jsonData as Category;
+  private jsonDataEntry(jsonData: any): Entry{
+    return jsonData as Entry;
   }
 
-  private jsonDataCategories(jsonData: any[]): Category[]{
-    const categories: Category[] = [];
-    jsonData.forEach(element => categories.push(element as Category));
-    return categories;
+  private jsonDataEntries(jsonData: any[]): Entry[]{
+    const entries: Entry[] = [];
+    jsonData.forEach(element => entries.push(element as Entry));
+    return entries;
   }
 
   private handleError(error: any): Observable<any>{

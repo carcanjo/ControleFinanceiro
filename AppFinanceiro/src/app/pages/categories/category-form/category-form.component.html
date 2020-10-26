@@ -30,11 +30,21 @@
                 <div class="form-froup col-md-8">
                     <label for="description" >Descrição </label>
                     <input type="text" class="form-control" id="description" formControlName ="description">
+                    <div class="text-danger" *ngIf="categoryForm.get('name').invalid && categoryForm.get('name').touched">
+                        <div *ngIf="categoryForm.get('name').errors.required"> Campo obrigatório </div>
+                        <div *ngIf="categoryForm.get('name').errors.minlength"> Campo deve conter no minimo dois caracteres</div>
+                    </div>
                 </div>   
             </div>
         </div>    
     </div>
-    <div class="col-md mt-3">
+    <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
+        <strong>Erro no servidor:</strong>
+        <ul>
+            <li *ngFor="let error of serverErrorMessages">{{error}}</li>
+        </ul>
+    </div>
+    <div class="col-md mt-3 float-right">
         <a routerLink="/categories" class="btn btn-outline-info mr-2"> <i class="fas fa-undo"></i> Voltar</a>
         <button [disabled]="submittingForm || categoryForm.invalid" type="submit" class="btn btn-outline-success "><i class="far fa-edit"></i> Salvar</button>
     </div>  
